@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAJIH UNLOCK | Professional System</title>
+    
+    <!-- المكتبات الخارجية -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ---------------------------------------------------------
+           1. المتغيرات والأنماط الأساسية
+        --------------------------------------------------------- */
+        :root {
+            --wa-green: #25D366;
+            --wa-dark: #075E54;
+            --wa-teal: #128C7E;
+            --bg-body: #111b21;
+            --bg-panel: #202c33;
+            --text-main: #e9edef;
+            --text-muted: #8696a0;
+            --input-bg: #2a3942;
+            --card-border: #2a3942;
+        }
+
+        [data-theme="light"] {
+            --bg-body: #dadbd3;
+            --bg-panel: #ffffff;
+            --text-main: #111b21;
+            --text-muted: #667781;
+            --input-bg: #f0f2f5;
+            --card-border: #e1e1e1;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0; background: var(--bg-body); color: var(--text-main);
+            height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ---------------------------------------------------------
+           2. شاشة الدخول (WAJIH UNLOCK)
+        --------------------------------------------------------- */
+        #login-screen {
+            position: fixed; inset: 0; background: var(--bg-body); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center;
+        }
+
+        .brand-title {
+            color: var(--wa-green);
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(37, 211, 102, 0.4);
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        /* حاوية الشعار الضخم */
+        .logo-wrapper {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .whatsapp-giant-icon {
+            font-size: 150px; /* حجم ضخم جداً */
+            color: var(--wa-green);
+            filter: drop-shadow(0 0 30px rgba(37, 211, 102, 0.6));
+            animation: giant-pulse 2.5s infinite ease-in-out;
+        }
+
+        @keyframes giant-pulse {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+
+        .pin-container { width: 85%; max-width: 350px; }
+        
+        .pin-input {
+            width: 100%; padding: 18px; border: 2px solid var(--wa-green); border-radius: 15px;
+            background: var(--bg-panel); color: var(--text-main); font-size: 22px;
+            text-align: center; outline: none; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* ---------------------------------------------------------
+           3. واجهة التطبيق الرئيسية
+        --------------------------------------------------------- */
+        header {
+            background: var(--wa-dark); color: #fff; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header-tools { display: flex; align-items: center; gap: 20px; }
+
+        .main-content { 
+            flex: 1; overflow-y: auto; padding-bottom: 90px;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+        }
+
+        .page { display: none; padding: 20px; animation: slideIn 0.4s ease-out; }
+        .active { display: block; }
+
+        .wa-card {
+            background: var(--bg-panel); padding: 25px; border-radius: 20px;
+            margin-bottom: 20px; border-bottom: 4px solid var(--wa-green);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .wa-input {
+            width: 100%; border: 2px solid transparent; padding: 15px;
+            background: var(--input-bg); border-radius: 12px; margin-top: 12px;
+            color: var(--text-main); outline: none; transition: 0.3s;
+        }
+
+        .wa-btn {
+            background: linear-gradient(45deg, var(--wa-green), var(--wa-teal));
+            color: #0b141a; border: none; padding: 16px; border-radius: 12px;
+            width: 100%; font-weight: 900; cursor: pointer; margin-top: 15px;
+            font-size: 16px; text-transform: uppercase; transition: 0.2s;
+        }
+
+        .acc-item {
+            display: flex; justify-content: space-between; padding: 15px;
+            background: var(--input-bg); border-radius: 12px; margin-top: 10px;
+        }
+
+        nav {
+            background: var(--bg-panel); display: flex; justify-content: space-around;
+            padding: 12px; border-top: 1px solid var(--card-border);
+            position: fixed; bottom: 0; width: 100%;
+        }
+
+        .nav-item { color: var(--text-muted); font-size: 11px; text-align: center; cursor: pointer; }
+        .nav-item.active { color: var(--wa-green); }
+        .nav-item i { font-size: 26px; display: block; margin-bottom: 5px; }
+
+        #toast {
+            visibility: hidden; min-width: 280px; background: #333; color: #fff;
+            text-align: center; border-radius: 50px; padding: 16px; position: fixed;
+            left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 10001;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 100px; opacity: 1; } }
+        @keyframes fadeout { from { bottom: 100px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+
+        /* القائمة المنسدلة */
+        .dropdown {
+            display: none; position: absolute; left: 0; top: 40px; background: var(--bg-panel);
+            min-width: 180px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border-radius: 12px; overflow: hidden;
+        }
+        .dropdown div { padding: 15px; border-bottom: 1px solid var(--card-border); cursor: pointer; text-align: right; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div id="toast"></div>
+
+    <!-- 1. شاشة الدخول الاحترافية -->
+    <div id="login-screen">
+        <h1 class="brand-title">WAJIH UNLOCK</h1>
+        <div class="logo-wrapper">
+            <i class="fab fa-whatsapp whatsapp-giant-icon"></i>
+        </div>
+        <div class="pin-container">
+            <input type="password" id="pincode" class="pin-input" placeholder="كود الوصول السري">
+            <button onclick="login()" class="wa-btn" style="margin-top: 30px;">دخول للنظام</button>
+        </div>
+        <p style="margin-top: 40px; color: var(--text-muted); font-size: 12px; opacity: 0.5;">PRO EDITION v2026</p>
+    </div>
+
+    <!-- 2. واجهة التطبيق الرئيسي -->
+    <div id="app" style="display:none; flex-direction: column; height: 100vh;">
+        <header>
+            <div class="brand">
+                <i class="fas fa-shield-check" style="color:var(--wa-green)"></i>
+                <span style="font-weight: bold; margin-right: 8px;">WAJIH <small>UNLOCK</small></span>
+            </div>
+            <div class="header-tools">
+                <i class="fas fa-moon" id="theme-toggle" style="cursor:pointer; font-size: 20px;"></i>
+                <div style="position: relative;">
+                    <i class="fas fa-ellipsis-v" id="menu-btn" style="cursor:pointer; padding:5px;"></i>
+                    <div class="dropdown" id="menu-dropdown">
+                        <div onclick="showInfo('dev')">المطور</div>
+                        <div onclick="showInfo('how')">كيف يعمل؟</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- صفحة إدارة الحسابات -->
+            <div id="view-acc" class="page active">
+                <div class="wa-card">
+                    <strong style="color: var(--wa-green); font-size: 18px;">إضافة محرك إرسال جديد</strong>
+                    <input type="email" id="email-in" class="wa-input" placeholder="البريد الإلكتروني (Gmail)">
+                    <input type="password" id="pass-in" class="wa-input" placeholder="كلمة مرور التطبيق (App Password)">
+                    <button onclick="saveAcc()" class="wa-btn">فحص وإضافة الحساب</button>
+                </div>
+                
+                <div class="wa-card">
+                    <strong>الحسابات المتصلة</strong>
+                    <div id="acc-list" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+
+            <!-- صفحة فك الحظر -->
+            <div id="view-run" class="page">
+                <div class="wa-card" style="text-align: center;">
+                    <i class="fas fa-bolt-lightning" style="font-size: 60px; color: var(--wa-green); margin-bottom: 20px;"></i>
+                    <h2 style="margin:0;">مركز العمليات السريعة</h2>
+                    <p style="color: var(--text-muted); font-size: 13px;">أدخل الرقم الدولي المحظور لبدء الفك</p>
+                    
+                    <input type="text" id="target-phone" class="wa-input" placeholder="249XXXXXXXXX" style="text-align:center; font-size: 22px; letter-spacing: 2px;">
+                    <button onclick="sendNow()" class="wa-btn" style="height: 60px; font-size: 18px;">تنفيذ بروتوكول الإرسال</button>
+                    
+                    <div id="log" style="margin-top: 25px; font-weight: bold; min-height: 40px; line-height: 1.6;"></div>
+                </div>
+            </div>
+        </main>
+
+        <nav>
+            <div class="nav-item active" onclick="nav('view-acc', this)">
+                <i class="fas fa-server"></i>
+                <span>المحركات</span>
+            </div>
+            <div class="nav-item" onclick="nav('view-run', this)">
+                <i class="fas fa-unlock-alt"></i>
+                <span>فك الحظر</span>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // --- 1. الإعدادات والبيانات ---
+        const MASTER_PIN = "1234";
+        let accs = JSON.parse(localStorage.getItem('wajih_accs')) || [];
+
+        // --- 2. نظام الثيم ---
+        const themeToggle = document.getElementById('theme-toggle');
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            themeToggle.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        themeToggle.onclick = () => {
+            let isL = document.documentElement.getAttribute('data-theme') === 'light';
+            document.documentElement.setAttribute('data-theme', isL ? 'dark' : 'light');
+            localStorage.setItem('theme', isL ? 'dark' : 'light');
+            themeToggle.classList.replace(isL ? 'fa-sun' : 'fa-moon', isL ? 'fa-moon' : 'fa-sun');
+            showToast(isL ? "🌙 تم تفعيل الوضع الليلي" : "☀️ تم تفعيل الوضع النهاري");
+        };
+
+        // --- 3. الدوال الأساسية ---
+        function showToast(m) {
+            const x = document.getElementById("toast");
+            x.innerHTML = m; x.className = "show";
+            setTimeout(() => x.className = "", 3000);
+        }
+
+        function login() {
+            if(document.getElementById('pincode').value === MASTER_PIN) {
+                document.getElementById('login-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('app').style.display = 'flex';
+                }, 500);
+                renderAccs();
+            } else { showToast("❌ كود الوصول غير صحيح!"); }
+        }
+
+        function nav(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        async function saveAcc() {
+            const e = document.getElementById('email-in').value.trim();
+            const p = document.getElementById('pass-in').value.trim();
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if(!regex.test(e)) return showToast("❌ البريد غير صالح!");
+            
+            showToast("⏳ جاري فحص اتصال المحرك...");
+            try {
+                const r = await fetch('/api/verify_account', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({e, p})
+                });
+                if(r.ok) {
+                    accs.push({e, p});
+                    localStorage.setItem('wajih_accs', JSON.stringify(accs));
+                    renderAccs();
+                    document.getElementById('email-in').value = '';
+                    document.getElementById('pass-in').value = '';
+                    showToast("✅ تم التحقق وإضافة المحرك");
+                } else { showToast("❌ فشل التحقق (تأكد من App Password)"); }
+            } catch { showToast("❌ خطأ: السيرفر غير متصل"); }
+        }
+
+        function renderAccs() {
+            const list = document.getElementById('acc-list');
+            list.innerHTML = accs.map((a, i) => `
+                <div class="acc-item">
+                    <span><i class="fas fa-envelope" style="margin-left:8px; color:var(--wa-green)"></i> ${a.e}</span>
+                    <i class="fas fa-trash-alt" onclick="delAcc(${i})" style="color:#ff5c5c; cursor:pointer;"></i>
+                </div>
+            `).join('');
+            if(accs.length === 0) list.innerHTML = "<p style='text-align:center; color:gray;'>لا توجد محركات إرسال حالياً</p>";
+        }
+
+        function delAcc(i) {
+            accs.splice(i, 1);
+            localStorage.setItem('wajih_accs', JSON.stringify(accs));
+            renderAccs();
+            showToast("🗑️ تم حذف المحرك");
+        }
+
+        async function sendNow() {
+            const ph = document.getElementById('target-phone').value;
+            const lg = document.getElementById('log');
+            if(!ph || accs.length === 0) return showToast("⚠️ يرجى إكمال البيانات أولاً!");
+
+            lg.style.color = "var(--wa-green)";
+            lg.innerHTML = "<i class='fas fa-satellite-dish fa-spin'></i> جاري فتح بروتوكول الاتصال بالخادم...";
+            
+            try {
+                const r = await fetch('/api/send_request', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({all_accounts: accs, phone: ph})
+                });
+                if(r.ok) {
+                    setTimeout(() => {
+                        lg.style.color = "orange";
+                        lg.innerHTML = "<i class='fas fa-microchip fa-spin'></i> جاري معالجة طلب فك الحظر في سيستم واتساب...";
+                        showToast("📩 تم تسليم الطلب بنجاح");
+                        
+                        setTimeout(() => {
+                            lg.style.color = "#25D366";
+                            lg.innerHTML = "<div style='font-size:20px'>✅ تم فك الحظر بنجاح!</div><small>يمكنك الآن استخدام الرقم على واتساب</small>";
+                            showToast("🔓 مبروك! العملية ناجحة");
+                        }, 3500);
+                    }, 2000);
+                } else { showToast("❌ فشل الإرسال (تحقق من المحركات)"); }
+            } catch { showToast("❌ خطأ: السيرفر متوقف"); }
+        }
+
+        function showInfo(t) {
+            showToast(t === 'dev' ? "👨‍💻 المطور: Wajih PRO - 2026" : "ℹ️ أضف حساب جيميل ثم الرقم المحظور واضغط تنفيذ.");
+        }
+
+        // التحكم في القائمة
+        const btn = document.getElementById('menu-btn');
+        const drop = document.getElementById('menu-dropdown');
+        btn.onclick = (e) => { e.stopPropagation(); drop.style.display = drop.style.display === 'block' ? 'none' : 'block'; };
+        window.onclick = () => drop.style.display = 'none';
+    </script>
+</body>
+</html>
